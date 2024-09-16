@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>ScoBro Guard Classes</Title>
+    <Authors>Scott Brown</Authors>
+    <Company>ScoBro Software</Company>
+    <Description>A set of extensions to guard/validate values as they are assigned</Description>
+	<Version>0.0.3-alpha</Version>
+    <PackageProjectUrl>https://github.com/scottpaulbrown/ScoBro.Guards</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/scottpaulbrown/ScoBro.Guards</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoBro.Guards", "ScoBro.Guards\ScoBro.Guards.csproj", "{8C92CDA5-9690-461D-A31C-99F448B7B713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoBro.Guards.UnitTests", "ScoBro.Guards.UnitTests\ScoBro.Guards.UnitTests.csproj", "{57461D4B-6FDB-4AF0-8548-765B955C10CF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C92CDA5-9690-461D-A31C-99F448B7B713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C92CDA5-9690-461D-A31C-99F448B7B713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C92CDA5-9690-461D-A31C-99F448B7B713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C92CDA5-9690-461D-A31C-99F448B7B713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57461D4B-6FDB-4AF0-8548-765B955C10CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57461D4B-6FDB-4AF0-8548-765B955C10CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57461D4B-6FDB-4AF0-8548-765B955C10CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57461D4B-6FDB-4AF0-8548-765B955C10CF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54799DD4-8061-42F9-AE9E-1A3C7C135CD0}
+	EndGlobalSection
+EndGlobal
