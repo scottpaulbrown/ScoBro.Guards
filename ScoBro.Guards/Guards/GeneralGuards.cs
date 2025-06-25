@@ -7,6 +7,9 @@ public static class GeneralGuards {
         return guardedValue;
     }
 
+    public static T ObjectIsNotNull<T>(this GuardedValue<T> guard) =>
+        guard.IsNotNull().ValueToValidate;
+
     public static GuardedValue<T> IsNotTrue<T>(this GuardedValue<T> guardedValue, Func<T, bool> criteria, string? message = null) {
         if (criteria(guardedValue.ValueToValidate))
             throw new ArgumentException(message, guardedValue.FieldName);
