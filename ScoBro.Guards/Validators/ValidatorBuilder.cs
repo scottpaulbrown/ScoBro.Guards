@@ -14,12 +14,17 @@ public class ValidatorBuilder<T> {
         Expression<Func<T, TProp>> propertyExpression,
         string? fieldName = null) {
 
-        BeginNewRuleSet(fieldName);
-        return new ValidationRuleBuilder<T, TProp>(this, propertyExpression, fieldName ?? propertyExpression.GetMemberName());
+        if (propertyExpression == null)
+            throw new ArgumentNullException(nameof(propertyExpression), "Property expression cannot be null.");
+
+        var memberName = propertyExpression.GetMemberName();
+
+        BeginNewRuleSet(memberName, fieldName);
+        return new ValidationRuleBuilder<T, TProp>(this, propertyExpression, fieldName ?? memberName);
     }
 
-    public void BeginNewRuleSet(string? fieldName = null) {
-        _currentRuleSet = new ValidationRuleSet<T>(fieldName: fieldName);
+    public void BeginNewRuleSet(string memberName, string? fieldName = null) {
+        _currentRuleSet = new ValidationRuleSet<T>(memberName: memberName, fieldName: fieldName);
         _validator.AddRuleSet(_currentRuleSet);
     }
 
@@ -38,6 +43,15 @@ public class ValidatorBuilder<T> {
             throw new ArgumentNullException(nameof(ruleSet), "Rule set cannot be null.");
 
         _validator.AddRuleSet(ruleSet);
+    }
+
+    public void AddRuleSets(IEnumerable<ValidationRuleSet<T>> ruleSets) {
+        if (ruleSets == null)
+            throw new ArgumentNullException(nameof(ruleSets), "Rule sets cannot be null.");
+
+        foreach (var ruleSet in ruleSets) {
+            AddRuleSet(ruleSet);
+        }
     }
 
     public Validator<T> Build() => _validator;

@@ -3,7 +3,7 @@ namespace ScoBro.Guards;
 public static class StringValidationExtensions {
     public static ValidationRuleBuilder<T, string> IsNotNullOrEmpty<T>(
         this ValidationRuleBuilder<T, string> builder,
-        bool stopIfInvalid = false) =>
+        bool stopIfInvalid = true) =>
         builder.CreateValidationRule(
             validateValue: value => !string.IsNullOrEmpty(value?.Trim()),
             errorMessage: $"{builder.FieldName} cannot be null or empty.",
@@ -30,7 +30,7 @@ public static class StringValidationExtensions {
 
     public static ValidationRuleBuilder<T, string> IsNotNullOrWhiteSpace<T>(
         this ValidationRuleBuilder<T, string> builder,
-        bool stopIfInvalid = false) =>
+        bool stopIfInvalid = true) =>
         builder.CreateValidationRule(
             validateValue: value => !string.IsNullOrWhiteSpace(value),
             errorMessage: $"{builder.FieldName} cannot be null or whitespace.",

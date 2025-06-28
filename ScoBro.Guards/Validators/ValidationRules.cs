@@ -1,15 +1,18 @@
 namespace ScoBro.Guards;
 
-
-
 public record class ValidationRuleSet<T> {
     private readonly List<IValidationRule<T>> _rules;
 
-    public ValidationRuleSet(List<IValidationRule<T>>? rules = null, string? fieldName = null) {
-        FieldName = fieldName;
+    public ValidationRuleSet(string memberName, List<IValidationRule<T>>? rules = null, string? fieldName = null) {
+        if (string.IsNullOrWhiteSpace(memberName))
+            throw new ArgumentException("Member name cannot be null or whitespace.", nameof(memberName));
+
+        MemberName = memberName;
+        FieldName = fieldName ?? memberName;
         _rules = rules ?? [];
     }
 
+    public string MemberName { get; }
     public string? FieldName { get; }
     public IReadOnlyList<IValidationRule<T>> Rules => _rules;
 

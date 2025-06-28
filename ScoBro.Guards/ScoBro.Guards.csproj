@@ -13,4 +13,9 @@
     <RepositoryUrl>https://github.com/scottpaulbrown/ScoBro.Guards</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\ScoBro.Foundation\ScoBro.Foundation\ScoBro.Foundation.csproj" />
+  </ItemGroup>
+
+
 </Project>

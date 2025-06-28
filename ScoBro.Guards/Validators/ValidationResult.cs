@@ -1,3 +1,5 @@
+using ScoBro.Foundation;
+
 namespace ScoBro.Guards;
 
 public record class ValidationResult {
@@ -10,6 +12,9 @@ public record class ValidationResult {
         IsValid = isValid;
         _errors = errors ?? [];
     }
+
+    public SimpleResult<T> ToSimpleResult<T>() =>
+        SimpleResult.FailWIthValidationErrors<T>(Errors.Select(e => e.ErrorMessage).ToList());
 
     public static ValidationResult Valid() => new(true);
     public static ValidationResult Invalid(List<ValidatorError> errors) => new(false, errors);

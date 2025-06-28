@@ -90,6 +90,26 @@ public static class GeneralValidationExtensions {
         return builder;
     }
 
+    public static ValidationRuleBuilder<T, TProp> UseValidator<T, TProp>(
+        this ValidationRuleBuilder<T, TProp> builder,
+        IValidator<TProp> validator,
+        bool stopIfInvalid = false) {
+
+        if (validator == null)
+            throw new ArgumentNullException(nameof(validator), "Validator cannot be null.");
+
+        var validationFunction = new Func<T, ValidationResult>(item => {
+            var value = builder.PropertyExpression.Compile()(item);
+            return validator.Validate(value);
+        });
+
+        builder.AddRule(
+            new ValidationRule<T>(validationFunction, StopValidationIfInvalid: stopIfInvalid)
+        );
+
+        return builder;
+    }
+
     public static ValidationRuleBuilder<T, TProp> UseAsyncValidator<T, TProp>(
         this ValidationRuleBuilder<T, TProp> builder,
         Func<IValidator<TProp>> validatorFactory,

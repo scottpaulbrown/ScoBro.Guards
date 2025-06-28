@@ -8,12 +8,18 @@ public class ValidationRuleBuilder<TEntity, TProperty> {
     public ValidationRuleBuilder(
         ValidatorBuilder<TEntity> validationBuilder,
         Expression<Func<TEntity, TProperty>> propertyExpression,
+        string memberName,
         string? fieldName = null) {
 
-        ValidatorBuilder = validationBuilder;
-        PropertyExpression = propertyExpression;
-        MemberName = propertyExpression.GetMemberName();
-        FieldName = fieldName ?? MemberName;
+        if (string.IsNullOrWhiteSpace(memberName))
+            throw new ArgumentException("Member name cannot be null or whitespace.", nameof(memberName));
+
+        ValidatorBuilder = validationBuilder ??
+            throw new ArgumentNullException(nameof(validationBuilder), "Validation builder cannot be null.");
+        PropertyExpression = propertyExpression ??
+            throw new ArgumentNullException(nameof(propertyExpression), "Property expression cannot be null.");
+        MemberName = memberName;
+        FieldName = fieldName ?? memberName;
     }
 
     public string MemberName { get; }
@@ -31,16 +37,7 @@ public class ValidationRuleBuilder<TEntity, TProperty> {
     public ValidationRuleBuilder<TEntity, TProp> Rule<TProp>(
         Expression<Func<TEntity, TProp>> propertyExpression,
         string? fieldName = null
-    ) {
-
-        ValidatorBuilder.BeginNewRuleSet(fieldName);
-
-        return new ValidationRuleBuilder<TEntity, TProp>(
-            validationBuilder: ValidatorBuilder,
-            propertyExpression: propertyExpression,
-            fieldName: fieldName ?? propertyExpression.GetMemberName()
-        );
-    }
+    ) => ValidatorBuilder.Rule(propertyExpression, fieldName);
 
     private Validator<TEntity> Build() => ValidatorBuilder.Build();
 

@@ -9,11 +9,11 @@ public class StringValidatorTests {
     [Test]
     public void StringValidator_IsNotNullOrEmpty() {
         // Arrange
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
             .Rule(x => x.Name)
                 .IsNotNullOrEmpty()
             .Rule(x => x.Description)
-                .IsNotNullOrEmpty();
+                .IsNotNullOrEmpty());
 
         // Act
         var validationResult = validator.Validate(new TestEntity {
@@ -30,8 +30,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_HasMaxLength() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).HasMaxLength(5);
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).HasMaxLength(5));
 
         var valid = validator.Validate(new TestEntity { Name = "Hello" });
         var invalid = validator.Validate(new TestEntity { Name = "HelloWorld" });
@@ -43,8 +43,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_HasMinLength() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).HasMinLength(3);
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).HasMinLength(3));
 
         var valid = validator.Validate(new TestEntity { Name = "Test" });
         var invalid = validator.Validate(new TestEntity { Name = "Hi" });
@@ -56,8 +56,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_IsNotNullOrWhiteSpace() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).IsNotNullOrWhiteSpace();
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).IsNotNullOrWhiteSpace());
 
         var valid = validator.Validate(new TestEntity { Name = "Test" });
         var invalid = validator.Validate(new TestEntity { Name = "   " });
@@ -69,8 +69,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_MatchesRegex() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).MatchesRegex(@"^A.*Z$");
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).MatchesRegex(@"^A.*Z$"));
 
         var valid = validator.Validate(new TestEntity { Name = "ABZ" });
         var invalid = validator.Validate(new TestEntity { Name = "BZ" });
@@ -82,8 +82,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_DoesNotContain() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).DoesNotContain("bad");
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).DoesNotContain("bad"));
 
         var valid = validator.Validate(new TestEntity { Name = "goodstring" });
         var invalid = validator.Validate(new TestEntity { Name = "thisisbad" });
@@ -95,8 +95,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_Contains() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).Contains("ok");
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).Contains("ok"));
 
         var valid = validator.Validate(new TestEntity { Name = "lookok" });
         var invalid = validator.Validate(new TestEntity { Name = "fail" });
@@ -108,8 +108,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_StartsWith() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).StartsWith("Pre");
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).StartsWith("Pre"));
 
         var valid = validator.Validate(new TestEntity { Name = "Prefix" });
         var invalid = validator.Validate(new TestEntity { Name = "Suffix" });
@@ -121,8 +121,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_EndsWith() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).EndsWith("End");
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).EndsWith("End"));
 
         var valid = validator.Validate(new TestEntity { Name = "TheEnd" });
         var invalid = validator.Validate(new TestEntity { Name = "Start" });
@@ -134,8 +134,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_IsEmail() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).IsEmail();
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).IsEmail());
 
         var valid = validator.Validate(new TestEntity { Name = "test@example.com" });
         var invalid = validator.Validate(new TestEntity { Name = "notanemail" });
@@ -147,8 +147,8 @@ public class StringValidatorTests {
 
     [Test]
     public void StringValidator_IsGuid() {
-        Validator<TestEntity> validator = Validator.For<TestEntity>()
-            .Rule(x => x.Name).IsGuid();
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).IsGuid());
 
         var valid = validator.Validate(new TestEntity { Name = Guid.NewGuid().ToString() });
         var invalid = validator.Validate(new TestEntity { Name = "not-a-guid" });
