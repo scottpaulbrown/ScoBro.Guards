@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using ScoBro.Foundation;
 
 namespace ScoBro.Guards;
 
@@ -9,6 +10,16 @@ public record class Validator {
         var validator = new Validator<TEntity>();
         var builder = new ValidatorBuilder<TEntity>(validator);
         configureAction(builder);
+        return builder.Build();
+    }
+
+    public static Validator<TEntity> Single<TEntity>(
+        string fieldName,
+        Action<ValidationRuleBuilder<TEntity, TEntity>> configureAction) {
+
+        var validator = new Validator<TEntity>();
+        var builder = new ValidatorBuilder<TEntity>(validator);
+        configureAction(builder.Rule(x => x, fieldName));
         return builder.Build();
     }
 
@@ -69,15 +80,24 @@ public record class Validator<T> : Validator, IValidator<T> {
         var errors = new List<ValidatorError>();
 
         foreach (var ruleSet in _ruleSets) {
+            bool stopAllOccurred = false;
+
             foreach (var rule in ruleSet.Rules) {
                 var result = rule.ToRule().Validate(item);
                 if (!result.IsValid) {
                     errors.AddRange(result.Errors);
 
+                    if (rule.StopValidationIfInvalid) {
+                        stopAllOccurred = true;
+                        break;
+                    }
+
                     if (rule.StopValidationIfInvalid)
                         break;
                 }
             }
+
+            if (stopAllOccurred) break;
         }
 
         return new ValidationResult(errors.Count == 0, errors);
@@ -95,15 +115,24 @@ public record class Validator<T> : Validator, IValidator<T> {
         var errors = new List<ValidatorError>();
 
         foreach (var ruleSet in _ruleSets) {
+            bool stopAllOccurred = false;
+
             foreach (var rule in ruleSet.Rules) {
                 var result = rule.IsAsync ? await rule.ToAsyncRule().ValidateAsync(item) : rule.ToRule().Validate(item);
                 if (!result.IsValid) {
                     errors.AddRange(result.Errors);
 
+                    if (rule.StopValidationIfInvalid) {
+                        stopAllOccurred = true;
+                        break;
+                    }
+
                     if (rule.StopValidationIfInvalid)
                         break;
                 }
             }
+
+            if (stopAllOccurred) break;
         }
 
         return new ValidationResult(errors.Count == 0, errors);
@@ -116,5 +145,15 @@ public record class Validator<T> : Validator, IValidator<T> {
             .Select(r => r.ValidationConstraint!)
             .Distinct()
             .ToList();
+    }
+
+    public SimpleResult<T> ValidateToSimpleResult(T item) {
+        var validationResult = Validate(item);
+        if (validationResult.IsValid) {
+            return SimpleResult.Ok(item);
+        }
+
+        return SimpleResult.FailWIthValidationErrors<T>(
+            validationResult.Errors.Select(e => e.ErrorMessage).ToList());
     }
 }

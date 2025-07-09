@@ -1,6 +1,15 @@
+using System.Security.Cryptography.X509Certificates;
+
 namespace ScoBro.Guards;
 
 public static class GeneralValidationExtensions {
+    public static ValidationRuleBuilder<T, TProp> IsNotNull<T, TProp>(
+        this ValidationRuleBuilder<T, TProp> builder,
+        string errorMessage = "Value cannot be null.",
+        bool stopIfInvalid = true,
+        bool stopAllIfInvalid = false) =>
+        builder.CreateValidationRule(x => x != null, errorMessage, stopIfInvalid, stopAllIfInvalid);
+
     public static ValidationRuleBuilder<T, TProp> Must<T, TProp>(
         this ValidationRuleBuilder<T, TProp> builder,
         Func<TProp, bool> predicate,
@@ -49,6 +58,7 @@ public static class GeneralValidationExtensions {
         Func<TProp, bool> validateValue,
         string errorMessage,
         bool stopIfInvalid = false,
+        bool stopAllIfInvalid = false,
         ValidationConstraint? validationConstraint = null) {
 
         var validationFunction = new Func<T, ValidationResult>(item => {
@@ -63,6 +73,7 @@ public static class GeneralValidationExtensions {
             new ValidationRule<T>(
                 ValidateFunction: validationFunction,
                 StopValidationIfInvalid: stopIfInvalid,
+                StopAllIfInvalid: stopAllIfInvalid,
                 ValidationConstraint: validationConstraint)
         );
 

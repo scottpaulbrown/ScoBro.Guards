@@ -40,6 +40,7 @@ public interface IValidationRule<T> {
 public record class ValidationRuleBase<TEntity>(
     bool IsAsync = false,
     bool StopValidationIfInvalid = false,
+    bool StopAllIfInvalid = false,
     ValidationConstraint? ValidationConstraint = null) {
 
     public string? ErrorMessage { get; private set; }
@@ -71,9 +72,11 @@ public record class ValidationRuleBase<TEntity>(
 public record class ValidationRule<TEntity>(
     Func<TEntity, ValidationResult> ValidateFunction,
     bool StopValidationIfInvalid = false,
+    bool StopAllIfInvalid = false,
     ValidationConstraint? ValidationConstraint = null)
     : ValidationRuleBase<TEntity>(
         StopValidationIfInvalid: StopValidationIfInvalid,
+        StopAllIfInvalid: StopAllIfInvalid,
         ValidationConstraint: ValidationConstraint
     ), IValidationRule<TEntity> {
 
@@ -85,10 +88,12 @@ public record class ValidationRule<TEntity>(
 public record class ValidationRuleAsync<TEntity>(
     Func<TEntity, Task<ValidationResult>> ValidateFunction,
     bool StopValidationIfInvalid = false,
+    bool StopAllIfInvalid = false,
     ValidationConstraint? ValidationConstraint = null)
 : ValidationRuleBase<TEntity>(
     IsAsync: true,
     StopValidationIfInvalid: StopValidationIfInvalid,
+    StopAllIfInvalid: StopAllIfInvalid,
     ValidationConstraint: ValidationConstraint
 ), IValidationRule<TEntity> {
 

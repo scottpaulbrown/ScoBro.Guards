@@ -16,6 +16,9 @@ public record class ValidationResult {
     public SimpleResult<T> ToSimpleResult<T>() =>
         SimpleResult.FailWIthValidationErrors<T>(Errors.Select(e => e.ErrorMessage).ToList());
 
+    public SimpleResult ToSimpleResult() =>
+        SimpleResult.FailWIthValidationErrors(Errors.Select(e => e.ErrorMessage).ToList());
+
     public static ValidationResult Valid() => new(true);
     public static ValidationResult Invalid(List<ValidatorError> errors) => new(false, errors);
     public static ValidationResult Invalid(ValidatorError error) => new(false, [error]);
