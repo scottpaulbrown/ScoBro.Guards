@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ScoBro.Guards;
@@ -9,6 +10,23 @@ public static class GeneralValidationExtensions {
         bool stopIfInvalid = true,
         bool stopAllIfInvalid = false) =>
         builder.CreateValidationRule(x => x != null, errorMessage, stopIfInvalid, stopAllIfInvalid);
+
+    public static ValidationRuleBuilder<T, Guid> IsNotEmpty<T>(
+        this ValidationRuleBuilder<T, Guid> builder,
+        string? errorMessage = null,
+        bool stopIfInvalid = true,
+        bool stopAllIfInvalid = false) =>
+        builder.CreateValidationRule(
+            validateValue: x => x != Guid.Empty,
+            errorMessage: errorMessage ?? $"{builder.FieldName} cannot be empty",
+            stopIfInvalid: stopIfInvalid,
+            stopAllIfInvalid: stopAllIfInvalid);
+
+    public static ValidationRuleBuilder<T, TProp> Optional<T, TProp>(
+        this ValidationRuleBuilder<T, TProp> builder) {
+        builder.MakeOptional();
+        return builder;
+    }
 
     public static ValidationRuleBuilder<T, TProp> Must<T, TProp>(
         this ValidationRuleBuilder<T, TProp> builder,

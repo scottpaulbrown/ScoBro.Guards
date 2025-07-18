@@ -24,6 +24,8 @@ public class ValidationRuleBuilder<TEntity, TProperty> {
 
     public string MemberName { get; }
     public string? FieldName { get; }
+    public bool IsOptional { get; private set; } 
+
     public ValidatorBuilder<TEntity> ValidatorBuilder { get; }
     public Expression<Func<TEntity, TProperty>> PropertyExpression { get; }
 
@@ -34,6 +36,8 @@ public class ValidationRuleBuilder<TEntity, TProperty> {
         ValidatorBuilder.AddRule(rule);
     }
 
+    public void MakeOptional() => IsOptional = true;
+    
     public ValidationRuleBuilder<TEntity, TProp> Rule<TProp>(
         Expression<Func<TEntity, TProp>> propertyExpression,
         string? fieldName = null

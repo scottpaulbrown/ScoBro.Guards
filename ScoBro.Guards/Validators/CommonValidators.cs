@@ -10,3 +10,14 @@ public record class RequiredMaxLengthStringValidator : Validator<string> {
     public static RequiredMaxLengthStringValidator Create(
         int maxLength, string? fieldName = null) => new(maxLength, fieldName);
 }
+
+public record class OptionalMaxLengthStringValidator : Validator<string> {
+    public OptionalMaxLengthStringValidator(int maxLength, string? fieldName = null) {
+        RuleFor(value => value, fieldName)
+            .Optional()
+            .HasMaxLength(maxLength);
+    }
+
+    public static OptionalMaxLengthStringValidator Create(
+        int maxLength, string? fieldName = null) => new(maxLength, fieldName);
+}

@@ -14,7 +14,7 @@ public static class StringValidationExtensions {
         int maxLength,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: v => v != null && v.Length <= maxLength,
+            validateValue: v => (builder.IsOptional && string.IsNullOrEmpty(v)) || v != null && v.Length <= maxLength,
             errorMessage: $"{builder.FieldName} cannot exceed {maxLength} characters.",
             stopIfInvalid: stopIfInvalid,
             validationConstraint: new StringMaxLengthConstraint(builder.MemberName, maxLength));
@@ -24,7 +24,7 @@ public static class StringValidationExtensions {
         int minLength,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: v => v != null && v.Length >= minLength,
+            validateValue: v => (builder.IsOptional && string.IsNullOrEmpty(v)) || v != null && v.Length >= minLength,
             errorMessage: $"{builder.FieldName} must be at least {minLength} characters.",
             stopIfInvalid: stopIfInvalid);
 
@@ -41,7 +41,7 @@ public static class StringValidationExtensions {
         string pattern,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: value => value != null && System.Text.RegularExpressions.Regex.IsMatch(value, pattern),
+            validateValue: value => (builder.IsOptional && string.IsNullOrEmpty(value)) || value != null && System.Text.RegularExpressions.Regex.IsMatch(value, pattern),
             errorMessage: $"{builder.FieldName} is not in the correct format.",
             stopIfInvalid: stopIfInvalid);
 
@@ -59,7 +59,7 @@ public static class StringValidationExtensions {
         string substring,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: value => value != null && value.Contains(substring),
+            validateValue: value => (builder.IsOptional && string.IsNullOrEmpty(value)) || value != null && value.Contains(substring),
             errorMessage: $"{builder.FieldName} must contain '{substring}'.",
             stopIfInvalid: stopIfInvalid);
 
@@ -68,7 +68,7 @@ public static class StringValidationExtensions {
         string prefix,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: value => value != null && value.StartsWith(prefix),
+            validateValue: value => (builder.IsOptional && string.IsNullOrEmpty(value)) || value != null && value.StartsWith(prefix),
             errorMessage: $"{builder.FieldName} must start with '{prefix}'.",
             stopIfInvalid: stopIfInvalid);
 
@@ -77,7 +77,7 @@ public static class StringValidationExtensions {
         string suffix,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: value => value != null && value.EndsWith(suffix),
+            validateValue: value => (builder.IsOptional && string.IsNullOrEmpty(value)) || value != null && value.EndsWith(suffix),
             errorMessage: $"{builder.FieldName} must end with '{suffix}'.",
             stopIfInvalid: stopIfInvalid);
 
@@ -85,7 +85,7 @@ public static class StringValidationExtensions {
         this ValidationRuleBuilder<T, string> builder,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: value => value != null && System.Text.RegularExpressions.Regex.IsMatch(value, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"),
+            validateValue: value => (builder.IsOptional && string.IsNullOrEmpty(value)) || value != null && System.Text.RegularExpressions.Regex.IsMatch(value, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"),
             errorMessage: $"{builder.FieldName} must be a valid email address.",
             stopIfInvalid: stopIfInvalid);
 
@@ -93,7 +93,7 @@ public static class StringValidationExtensions {
         this ValidationRuleBuilder<T, string> builder,
         bool stopIfInvalid = false) =>
         builder.CreateValidationRule(
-            validateValue: value => Guid.TryParse(value, out _),
+            validateValue: value => (builder.IsOptional && string.IsNullOrEmpty(value)) || Guid.TryParse(value, out _),
             errorMessage: $"{builder.FieldName} must be a valid GUID.",
             stopIfInvalid: stopIfInvalid);
 }

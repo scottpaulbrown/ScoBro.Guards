@@ -14,6 +14,8 @@ public record class ValidationRuleSet<T> {
 
     public string MemberName { get; }
     public string? FieldName { get; }
+    public bool IsOptional { get; private set; }
+
     public IReadOnlyList<IValidationRule<T>> Rules => _rules;
 
     public void AddRule(IValidationRule<T> rule) {
@@ -22,6 +24,8 @@ public record class ValidationRuleSet<T> {
         _rules.Add(rule);
     }
 
+    public void MakeOptional() => IsOptional = true;
+
     public bool HasFieldName() => !string.IsNullOrWhiteSpace(FieldName);
 }
 
@@ -29,6 +33,8 @@ public interface IValidationRule<T> {
     bool IsAsync { get; }
     bool HasErrorMessage();
     bool StopValidationIfInvalid { get; }
+    bool StopAllIfInvalid { get; }
+
     ValidationConstraint? ValidationConstraint { get; }
 
     string? ErrorMessage { get; }

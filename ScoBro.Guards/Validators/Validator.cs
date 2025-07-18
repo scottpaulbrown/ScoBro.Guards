@@ -87,7 +87,7 @@ public record class Validator<T> : Validator, IValidator<T> {
                 if (!result.IsValid) {
                     errors.AddRange(result.Errors);
 
-                    if (rule.StopValidationIfInvalid) {
+                    if (rule.StopAllIfInvalid) {
                         stopAllOccurred = true;
                         break;
                     }
@@ -122,7 +122,7 @@ public record class Validator<T> : Validator, IValidator<T> {
                 if (!result.IsValid) {
                     errors.AddRange(result.Errors);
 
-                    if (rule.StopValidationIfInvalid) {
+                    if (rule.StopAllIfInvalid) {
                         stopAllOccurred = true;
                         break;
                     }

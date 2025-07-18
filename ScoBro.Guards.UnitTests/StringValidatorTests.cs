@@ -41,6 +41,19 @@ public class StringValidatorTests {
         Assert.That(invalid.Errors[0].ErrorMessage, Is.EqualTo("Name cannot exceed 5 characters."));
     }
 
+    [TestCase(null, true)]
+    [TestCase("", true)]
+    [TestCase("Hello", true)]
+    [TestCase("HelloWorld", false)]
+    public void StringValidator_HasMaxLength_Optional(string? value, bool expectedResult) {
+        Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
+            .Rule(x => x.Name).Optional().HasMaxLength(5));
+
+        var result = validator.Validate(new TestEntity { Name = value });
+
+        Assert.That(result.IsValid, Is.EqualTo(expectedResult));
+    }
+
     [Test]
     public void StringValidator_HasMinLength() {
         Validator<TestEntity> validator = Validator.For<TestEntity>(builder => builder
