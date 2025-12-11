@@ -13,6 +13,14 @@ public record class Validator {
         return builder.Build();
     }
 
+    /// <summary>
+    /// Creates a validator inline when it's not necessary to define a class for it, such
+    /// as conducting adhoc validation.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="fieldName"></param>
+    /// <param name="configureAction"></param>
+    /// <returns></returns>
     public static Validator<TEntity> Single<TEntity>(
         string fieldName,
         Action<ValidationRuleBuilder<TEntity, TEntity>> configureAction) {
@@ -38,6 +46,8 @@ public interface IValidator<T> : IValidator {
 
     ValidationResult Validate(T item);
     Task<ValidationResult> ValidateAsync(T item);
+    SimpleResult<T> ValidateToSimpleResult(T item);
+    Task<SimpleResult<T>> ValidateToSimpleResultAsync(T item);
     void AddRuleSets(IEnumerable<ValidationRuleSet<T>> ruleSets);
 }
 
@@ -149,6 +159,16 @@ public record class Validator<T> : Validator, IValidator<T> {
 
     public SimpleResult<T> ValidateToSimpleResult(T item) {
         var validationResult = Validate(item);
+        if (validationResult.IsValid) {
+            return SimpleResult.Ok(item);
+        }
+
+        return SimpleResult.FailWIthValidationErrors<T>(
+            validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+    }
+
+    public async Task<SimpleResult<T>> ValidateToSimpleResultAsync(T item) {
+        var validationResult = await ValidateAsync(item);
         if (validationResult.IsValid) {
             return SimpleResult.Ok(item);
         }

@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using ScoBro.Foundation;
 
 namespace ScoBro.Guards;
 
@@ -19,6 +20,18 @@ public static class GeneralValidationExtensions {
         builder.CreateValidationRule(
             validateValue: x => x != Guid.Empty,
             errorMessage: errorMessage ?? $"{builder.FieldName} cannot be empty",
+            stopIfInvalid: stopIfInvalid,
+            stopAllIfInvalid: stopAllIfInvalid);
+
+    public static ValidationRuleBuilder<T, string> DomainEnum<T, TEnum>(
+        this ValidationRuleBuilder<T, string> builder,
+        string? errorMessage = null,
+        bool stopIfInvalid = true,
+        bool stopAllIfInvalid = false)
+        where TEnum : EnumBase<TEnum> =>
+        builder.CreateValidationRule(
+            validateValue: x => !string.IsNullOrEmpty(x) && EnumBase<TEnum>.TryParse(x, out var _),
+            errorMessage: errorMessage ?? $"Invalid value for domain enum {typeof(TEnum).Name}",
             stopIfInvalid: stopIfInvalid,
             stopAllIfInvalid: stopAllIfInvalid);
 
@@ -98,7 +111,7 @@ public static class GeneralValidationExtensions {
         return builder;
     }
 
-    public static ValidationRuleBuilder<T, TProp> UseValidator<T, TProp>(
+    public static ValidationRuleBuilder<T?, TProp> UseValidator<T, TProp>(
         this ValidationRuleBuilder<T, TProp> builder,
         Func<IValidator<TProp>> validatorFactory,
         bool stopIfInvalid = false) {
