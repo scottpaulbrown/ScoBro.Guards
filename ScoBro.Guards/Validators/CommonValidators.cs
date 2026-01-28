@@ -30,4 +30,6 @@ public record class RequiredDomainEnumValidator<TEnum> : Validator<string> where
             .IsNotNullOrEmpty()
             .Must(value => EnumBase<TEnum>.TryParse(value, out var _), $"Invalid value for domain enum {typeof(TEnum).Name}");
     }
+
+    public static RequiredDomainEnumValidator<TEnum> Create(string? fieldName = null) => new(fieldName);
 }
